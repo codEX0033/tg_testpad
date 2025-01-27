@@ -4,7 +4,7 @@ import sqlite3
 import random
 import time
 
-bot = telebot.TeleBot('7806589236:AAGk_GMl6VtpF8v87ElqyXsEi-J_cvL_4a4')
+bot = telebot.TeleBot('')
 
 def init_db():
     conn = sqlite3.connect('tests.db')
