@@ -4,7 +4,7 @@ import sqlite3
 import random
 import time
 
-bot = telebot.TeleBot('')
+bot = telebot.TeleBot('7806589236:AAGk_GMl6VtpF8v87ElqyXsEi-J_cvL_4a4')
 
 def init_db():
     conn = sqlite3.connect('tests.db')
@@ -975,6 +975,28 @@ def cancel_operation(message):
         del user_states[message.from_user.id]
     
     manage_ads(message)
+
+def update_user_activity(user):
+    """Обновляет информацию о пользователе и его активности"""
+    conn = sqlite3.connect('tests.db')
+    c = conn.cursor()
+    
+    try:
+        c.execute("""
+            INSERT INTO users (id, username, first_name, last_name)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(id) DO UPDATE SET
+                username = excluded.username,
+                first_name = excluded.first_name,
+                last_name = excluded.last_name,
+                last_activity = CURRENT_TIMESTAMP
+        """, (user.id, user.username, user.first_name, user.last_name))
+        
+        conn.commit()
+    except sqlite3.Error as e:
+        print(f"Error updating user activity: {e}")
+    finally:
+        conn.close()
 
 init_db()
 
